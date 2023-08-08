@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<project>
+<project xmlns="http://lime.software/project/1.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://lime.software/project/1.0.2 http://lime.software/xsd/project-1.0.2.xsd">
+
 <!--
   4Ever Engine made by AlyAnt0, forked from the Forever Engine Legacy Android Port by Musk-h (i cant talk with him, he deleted all his stuff in internet so the other projects its all lost media, all the projects that is not lost media is the his lullaby android port, and the forever engine android port (i haved it so i put the source code for archiving), i remeber of one android port for smb funk mix fnf mod that he made, but i cant find it.)
   and also he blocked me in discord (yes i have his discord) for no apparent reason, so Musk-h if you seeing this, if i made something bad for you, im very sorry about it.
