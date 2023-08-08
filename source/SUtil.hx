@@ -64,7 +64,7 @@ class SUtil
 		{
 			for (format in ['.lua', '.json', '.mp4', '.txt', '.xml'])
 			{
-				if (file.endsWith(format) || (file.contains('skins/') && file.endsWith('.png')))
+				if (file.endsWith(format))
 				{
 					var shit:String = file.replace('assets/', '');
 					var library:String = shit.replace(shit.substring(shit.indexOf('/', 0), shit.length), '');
