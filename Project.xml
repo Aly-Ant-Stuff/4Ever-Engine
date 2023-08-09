@@ -13,7 +13,7 @@
 
 	<assets path="assets/android" if="android" />
 
-	<config:android target-sdk-version="29"/> <!-- same but with gradle -->
+	<!-- <config:android target-sdk-version="29"/> <!-- same but with gradle -->
 	<!--Android Internet Connection-->
 	<config:android permission="android.permission.ACCESS_NETWORK_STATE" />
 	<config:android permission="android.permission.ACCESS_WIFI_STATE" />
