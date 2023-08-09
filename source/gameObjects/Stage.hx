@@ -22,11 +22,44 @@ import meta.state.PlayState;
 
 using StringTools;
 
+typedef StageFile = {
+	var objects:Array<ObjectStruct>;
+	var bf_position:Array<Float>;
+	var gf_position:Array<Float>;
+	var dad_position:Array<Float>;
+	var cameraZoom:Float;
+	var curStage:String;
+}
+
+typedef ObjectStruct = {
+	var name_tag:String; //util for a event or something
+	var image:String;
+	var x:Float;
+	var y:Float;
+	var scale:Array<Float>;
+	var scrollFactor:Array<Float>;
+	var animated:Bool;
+	var animations:AnimationStruct;
+	var add_object:Bool;
+}
+
+typedef AnimationStruct = {
+	var name:String;
+	var prefix:String;
+	var framerate:Int;
+	var offsetX:Float;
+	var offsetY:Float;
+	var indices:Array<Int>;
+	var autoPlay:Bool;
+}
+
+
 /**
 	This is the stage class. It sets up everything you need for stages in a more organised and clean manner than the
 	base game. It's not too bad, just very crowded. I'll be adding stages as a separate
 	thing to the weeks, making them not hardcoded to the songs.
 **/
+
 class Stage extends FlxTypedGroup<FlxBasic>
 {
 	var halloweenBG:FNFSprite;
@@ -47,6 +80,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 	var bgGirls:BackgroundGirls;
 
 	public var curStage:String;
+	public var curStageObjects:Map<String, FNFSprite> = new Map<String, FNFSprite>();
 
 	var daPixelZoom = PlayState.daPixelZoom;
 
