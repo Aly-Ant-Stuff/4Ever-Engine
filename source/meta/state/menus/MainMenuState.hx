@@ -28,7 +28,11 @@ class MainMenuState extends MusicBeatState
 	var bg:FlxSprite; // the background has been separated for more control
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
-
+	var optionMap:Map<String, flixel.FlxState> = [
+		'story mode' => new StoryMenuState(),
+		'freeplay' => new FreeplayState(),
+		'options' => new OptionsMenuState()
+	];
 	var optionShit:Array<String> = ['story mode', 'freeplay', 'options'];
 	var canSnap:Array<Float> = [];
 
@@ -133,7 +137,7 @@ class MainMenuState extends MusicBeatState
 		var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, "Forever Engine v" + Main.gameVersion, 12);
 		versionShit.scrollFactor.set();
 		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		add(versionShit);
+		//add(versionShit);
 
 		//
 
@@ -236,17 +240,14 @@ class MainMenuState extends MusicBeatState
 					FlxFlicker.flicker(spr, 1, 0.06, false, false, function(flick:FlxFlicker)
 					{
 						var daChoice:String = optionShit[Math.floor(curSelected)];
-
-						switch (daChoice)
+						if ((optionMap[daChoice] is flixel.FlxState))
 						{
-							case 'story mode':
-								Main.switchState(this, new StoryMenuState());
-							case 'freeplay':
-								Main.switchState(this, new FreeplayState());
-							case 'options':
+							if (daChoice == 'options')
+							{
 								transIn = FlxTransitionableState.defaultTransIn;
 								transOut = FlxTransitionableState.defaultTransOut;
-								Main.switchState(this, new OptionsMenuState());
+							}
+							Main.switchState(this, optionMap[daChoice]);
 						}
 					});
 				}
