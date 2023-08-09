@@ -161,6 +161,7 @@ class ChartingState extends MusicBeatState
 		FlxG.mouse.useSystemCursor = false; // Use system cursor because it's prettier
 		FlxG.mouse.visible = true; // Hide mouse on start
 
+		#if MOBILE_CONTROLS
 		keySpace = new FlxButton(60, 60, "");
         keySpace.loadGraphic('assets/android/menu/keyspace.png');
         keySpace.alpha = 0.75;
@@ -171,7 +172,6 @@ class ChartingState extends MusicBeatState
         keyShift.alpha = 0.75;
         add(keyShift);
 
-		#if MOBILE_CONTROLS
 		addVirtualPad(NONE, A);
 		#end
 	}
@@ -180,7 +180,7 @@ class ChartingState extends MusicBeatState
 
 	override public function update(elapsed:Float)
 	{
-		if (FlxG.keys.justPressed.SPACE || keySpace.justPressed)
+		if (FlxG.keys.justPressed.SPACE #if MOBILE_CONTROLS || keySpace.justPressed #end)
 		{
 			if (songMusic.playing)
 			{
@@ -231,7 +231,7 @@ class ChartingState extends MusicBeatState
 		{
 			var fakeMouseX = FlxG.mouse.x - fullGrid.x;
 			dummyArrow.x = (Math.floor((fakeMouseX) / gridSize) * gridSize) + fullGrid.x;
-			if (FlxG.keys.pressed.SHIFT || keyShift.pressed)
+			if (FlxG.keys.pressed.SHIFT #if MOBILE_CONTROLS || keyShift.pressed #end)
 				dummyArrow.y = FlxG.mouse.y;
 			else
 				dummyArrow.y = Math.floor(FlxG.mouse.y / gridSize) * gridSize;
