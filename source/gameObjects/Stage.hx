@@ -1,5 +1,6 @@
 package gameObjects;
 
+//flixel stuff
 import flixel.FlxBasic;
 import flixel.FlxCamera;
 import flixel.FlxG;
@@ -14,21 +15,30 @@ import flixel.math.FlxPoint;
 import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.tweens.FlxTween;
+
+//4ever engine dependecies
 import gameObjects.background.*;
-import meta.CoolUtil;
-import meta.data.Conductor;
-import meta.data.dependency.FNFSprite;
 import meta.state.PlayState;
+import meta.data.dependency.FNFSprite;
+import meta.data.Conductor;
+import meta.CoolUtil;
 
 using StringTools;
 
 typedef StageFile = {
 	var objects:Array<ObjectStruct>;
+	@:optional var sounds:Array<SoundStruct>;
 	var bf_position:Array<Float>;
 	var gf_position:Array<Float>;
 	var dad_position:Array<Float>;
 	var cameraZoom:Float;
 	var curStage:String;
+}
+
+typedef SoundStruct = {
+	var name_tag:String;
+	var path:String;
+	var auto_play:Bool;
 }
 
 typedef ObjectStruct = {
@@ -39,7 +49,7 @@ typedef ObjectStruct = {
 	var scale:Array<Float>;
 	var scrollFactor:Array<Float>;
 	var animated:Bool;
-	var animations:AnimationStruct;
+	var animations:Array<AnimationStruct>;
 	var add_object:Bool;
 }
 
@@ -47,9 +57,9 @@ typedef AnimationStruct = {
 	var name:String;
 	var prefix:String;
 	var framerate:Int;
-	var offsetX:Float;
-	var offsetY:Float;
+	var offsets:Array<Float>;
 	var indices:Array<Int>;
+	var loop:Bool;
 	var autoPlay:Bool;
 }
 
@@ -78,18 +88,21 @@ class Stage extends FlxTypedGroup<FlxBasic>
 	var santa:FNFSprite;
 
 	var bgGirls:BackgroundGirls;
+	public var foreground:FlxTypedGroup<FlxBasic>;
 
 	public var curStage:String;
-	public var curStageObjects:Map<String, FNFSprite> = new Map<String, FNFSprite>();
+	public var stageObjects:Map<String, FNFSprite> = new Map<String, FNFSprite>();
+	public var stageSounds:Map<String, FlxSound> = new Map<String, FlxSound>();
+	private var curFile:Dynamic = null;
 
 	var daPixelZoom = PlayState.daPixelZoom;
-
-	public var foreground:FlxTypedGroup<FlxBasic>;
 
 	public function new(curStage)
 	{
 		super();
 		this.curStage = curStage;
+
+		if ()
 
 		/// get hardcoded stage type if chart is fnf style
 		if (PlayState.determinedChartType == "FNF")
@@ -582,20 +595,22 @@ class Stage extends FlxTypedGroup<FlxBasic>
 			gf.playAnim('hairBlow');
 		}
 
+		var phillyTrainC:FNFSprite = stageObjects.get('phillyTrain');
+
 		if (startedMoving)
 		{
-			phillyTrain.x -= 400;
+			phillyTrainC.x -= 400;
 
-			if (phillyTrain.x < -2000 && !trainFinishing)
+			if (phillyTrainC.x < -2000 && !trainFinishing)
 			{
-				phillyTrain.x = -1150;
+				phillyTrainC.x = -1150;
 				trainCars -= 1;
 
 				if (trainCars <= 0)
 					trainFinishing = true;
 			}
 
-			if (phillyTrain.x < -4000 && trainFinishing)
+			if (phillyTrainC.x < -4000 && trainFinishing)
 				trainReset(gf);
 		}
 	}
