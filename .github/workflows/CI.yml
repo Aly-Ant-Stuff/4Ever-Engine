@@ -71,7 +71,7 @@ jobs:
       - name: Setup Java JDK
         uses: actions/setup-java@main
         with:
-          # distribution: 'zulu'
+          distribution: 'zulu'
           java-version: '11'
 
       - name: Setup Android SDK
