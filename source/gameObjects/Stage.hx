@@ -182,7 +182,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 				__fileToLoad = _targetFile;
 
 			__path = SUtil.getStorageDirectory() + base + __fileToLoad;
-			if (FileSystem.exists(__path)
+			if (FileSystem.exists(__path))
 			{
 				curFile = Json.parse(File.getContent(path));
 				logTrace('it exists!!', NOTICE);
