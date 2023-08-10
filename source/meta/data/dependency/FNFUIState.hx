@@ -5,8 +5,10 @@ import flixel.FlxCamera;
 import flixel.text.FlxText;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.util.FlxColor;
+import flixel.tweens.FlxTween;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.addons.ui.FlxUIState;
+import flixel.util.FlxTimer;
 
 class FNFUIState extends FlxUIState
 {
@@ -35,7 +37,7 @@ class FNFUIState extends FlxUIState
 		super.create();
 	}
 
-	var lastText:FlxText;
+	var lastText:FlxText = null;
 	public function logTrace(log:String, type:TextType):Void
 	{
 		_trackedLogs.push(log);
@@ -55,6 +57,15 @@ class FNFUIState extends FlxUIState
 		text.setFormat(Paths.font('vcr.tff'), 22, color, FlxTextAlign.LEFT,  FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		text.y = (lastText != null ? lastText.height + 5 : 10);
 		_traceGroup.add(text);
+
+		new FlxTimer().start(3, function(t:FlxTimer) {
+			FlxTween.tween(text, {alpha: 0.000001}, 0.5, {
+				onComplete: function(tw:FlxTween) {
+					//lastText = text;
+					text.destroy();
+				}
+			});
+		});
 	}
 
 	override function destroy():Void
