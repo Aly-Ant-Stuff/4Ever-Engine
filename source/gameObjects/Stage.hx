@@ -32,6 +32,7 @@ using StringTools;
 
 typedef StageFile = {
 	var objects:Array<ObjectStruct>;
+	@:optional var groups:Array<GroupStruct>;
 	@:optional var sounds:Array<SoundStruct>;
 	var bf_position:Array<Float>;
 	var gf_position:Array<Float>;
@@ -52,10 +53,27 @@ typedef ObjectStruct = {
 	var x:Float;
 	var y:Float;
 	var scale:Array<Float>;
-	var scrollFactor:Array<Float>;
+	var scroll_factor:Array<Float>;
 	var animated:Bool;
-	var animations:Array<AnimationStruct>;
+	@:optional var animations:Array<AnimationStruct>;
+	@:optional var atlas:String;
+	var antialiasing:Bool;
 	var add_object:Bool;
+}
+
+typedef GroupStruct = {
+	var name_tag:String;
+	var image:String;
+	var init_x:Float;
+	var init_y:Float;
+	var copy_x:Float;
+	var copy_y:Float;
+	var copy_times:Int;
+	var animated:Bool;
+	@:optional animations:Array<AnimationStruct>;
+	@:optional atlas:String;
+	var antialiasing:Bool;
+	var add_group:Bool;
 }
 
 typedef AnimationStruct = {
@@ -65,9 +83,8 @@ typedef AnimationStruct = {
 	var offsets:Array<Float>;
 	var indices:Array<Int>;
 	var loop:Bool;
-	var autoPlay:Bool;
+	var auto_play:Bool;
 }
-
 
 /**
 	This is the stage class. It sets up everything you need for stages in a more organised and clean manner than the
@@ -97,7 +114,9 @@ class Stage extends FlxTypedGroup<FlxBasic>
 	public var curStage:String;
 	public var stageObjects:Map<String, FNFSprite> = new Map<String, FNFSprite>();
 	public var stageSounds:Map<String, FlxSound> = new Map<String, FlxSound>();
-	public final stageTemplate = '{
+
+	//i had to make this manually so respect me -AlyAnt0
+	public var stageTemplate = '{
 		"objects": [
 			{
 				"name_tag": "stageBackground",
@@ -108,19 +127,43 @@ class Stage extends FlxTypedGroup<FlxBasic>
 				"scroll_factor": [0.9, 0.9],
 				"animated": false,
 				"animations": [],
+				"antialiasing": true,
+				"add_object": true
+			},
+			{
+				"name_tag": "stageFront",
+				"image": "stagefront",
+				"x": -650,
+				"y": 600,
+				"scale": [0.9, 0.9],
+				"scroll_factor": [0.9, 0.9],
+				"animated": false,
+				"animations": [],
+				"antialiasing": true,
+				"add_object": true
+			},
+			{
+				"name_tag": "stageCurtains",
+				"image": "stagecurtains",
+				"x": -500,
+				"y": -300,
+				"scale": [0.9, 0.9],
+				"scroll_factor": [1.3, 1.3],
+				"animated": false,
+				"animations": [],
+				"antialiasing": true,
 				"add_object": true
 			}
 		],
-		"bf_position": [],
-		"gf_position": [],
-		"dad_position": [],
+		"bf_position": [750, 850],
+		"gf_position": [300, 100],
+		"dad_position": [50, 850],
 		"camera_zoom": 0.9,
-		"curStage": "stageTemplate",
-	}'
+		"curStage": "stageTemplate"
+	}';
 	var daPixelZoom = PlayState.daPixelZoom;
 
-	private var curFile:StageFile = null;
-
+	private var curFile:StageFile = null; //initially its null for no error stuff
 
 	public function new(curStage)
 	{
@@ -136,10 +179,9 @@ class Stage extends FlxTypedGroup<FlxBasic>
 		{
 			var _targetFile:String = file;
 			if (FileSystem.exists(__path + _targetFile))
-			{
 				__fileToLoad = _targetFile;
-				__path = SUtil.getStorageDirectory() + base + __fileToLoad;
-			}
+
+			__path = SUtil.getStorageDirectory() + base + __fileToLoad;
 			if (FileSystem.exists(__path)
 			{
 				curFile = Json.parse(File.getContent(path));
