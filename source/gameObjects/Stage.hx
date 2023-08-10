@@ -70,8 +70,8 @@ typedef GroupStruct = {
 	var copy_y:Float;
 	var copy_times:Int;
 	var animated:Bool;
-	@:optional animations:Array<AnimationStruct>;
-	@:optional atlas:String;
+	@:optional var animations:Array<AnimationStruct>;
+	@:optional var atlas:String;
 	var antialiasing:Bool;
 	var add_group:Bool;
 }
