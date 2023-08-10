@@ -23,6 +23,11 @@ import meta.data.dependency.FNFSprite;
 import meta.data.Conductor;
 import meta.CoolUtil;
 
+//other packages
+import haxe.Json;
+import sys.FileSystem;
+import sys.io.File;
+
 using StringTools;
 
 typedef StageFile = {
@@ -31,7 +36,7 @@ typedef StageFile = {
 	var bf_position:Array<Float>;
 	var gf_position:Array<Float>;
 	var dad_position:Array<Float>;
-	var cameraZoom:Float;
+	var camera_zoom:Float;
 	var curStage:String;
 }
 
@@ -89,20 +94,61 @@ class Stage extends FlxTypedGroup<FlxBasic>
 
 	var bgGirls:BackgroundGirls;
 	public var foreground:FlxTypedGroup<FlxBasic>;
-
 	public var curStage:String;
 	public var stageObjects:Map<String, FNFSprite> = new Map<String, FNFSprite>();
 	public var stageSounds:Map<String, FlxSound> = new Map<String, FlxSound>();
-	private var curFile:Dynamic = null;
-
+	public final stageTemplate = '{
+		"objects": [
+			{
+				"name_tag": "stageBackground",
+				"image": "stageback",
+				"x": -600, 
+				"y": -200,
+				"scale": [1, 1],
+				"scroll_factor": [0.9, 0.9],
+				"animated": false,
+				"animations": [],
+				"add_object": true
+			}
+		],
+		"bf_position": [],
+		"gf_position": [],
+		"dad_position": [],
+		"camera_zoom": 0.9,
+		"curStage": "stageTemplate",
+	}'
 	var daPixelZoom = PlayState.daPixelZoom;
+
+	private var curFile:StageFile = null;
+
 
 	public function new(curStage)
 	{
 		super();
 		this.curStage = curStage;
 
-		if ()
+		//i got so fucking hard coded -AlyAnt0
+		var __base:String = 'assets/images/backgrounds/${curStage}/';
+		var __fileToLoad:String = '';
+		var alternativeFiles:Array<String> = ['data', curStage, 'stage'];
+		var __path:String = '';
+		for (file in alternativeFiles)
+		{
+			var _targetFile:String = file;
+			if (FileSystem.exists(__path + _targetFile))
+			{
+				__fileToLoad = _targetFile;
+				__path = SUtil.getStorageDirectory() + base + __fileToLoad;
+			}
+			if (FileSystem.exists(__path)
+			{
+				curFile = Json.parse(File.getContent(path));
+				log('it exists!!', NOTICE);
+			} else {
+				curFile = Json.parse(stageTemplate);
+				log('it doesent exists you DUMBASS!!!!!!', ERROR);
+			}
+		}
 
 		/// get hardcoded stage type if chart is fnf style
 		if (PlayState.determinedChartType == "FNF")
