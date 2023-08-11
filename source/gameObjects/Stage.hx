@@ -786,7 +786,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 					obj.frames = Paths.getSparrowAtlas(_imagePath);
 				case "packer":
 					obj.frames = Paths.getPackerAtlas(_imagePath);
-			};
+			}
 			for (anim in _animations) 
 			{
 				if (anim != null) 
