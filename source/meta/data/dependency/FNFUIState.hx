@@ -5,10 +5,10 @@ import flixel.FlxCamera;
 import flixel.text.FlxText;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.util.FlxColor;
+import flixel.util.FlxTimer;
 import flixel.tweens.FlxTween;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.addons.ui.FlxUIState;
-import flixel.util.FlxTimer;
 
 class FNFUIState extends FlxUIState
 {
@@ -41,31 +41,34 @@ class FNFUIState extends FlxUIState
 	public static function logTrace(log:String, type:TextType):Void
 	{
 		_trackedLogs.push(log);
-		//_numLogs++;
-		var color:FlxColor;
-		var text = new FlxText(0, 0, FlxG.width, log, 22);
-		switch (type)
+		if (_traceCam != null && _traceGroup != null)
 		{
-			case NORMAL:
-				color = FlxColor.WHITE;
-			case ERROR:
-				color = FlxColor.RED;
-			case NOTICE:
-				color = FlxColor.GREEN;
-		}
-		//text.ID = _numLogs;
-		text.setFormat(Paths.font('vcr.tff'), 22, color, FlxTextAlign.LEFT,  FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		text.y = (lastText != null ? lastText.height + 5 : 10);
-		_traceGroup.add(text);
-
-		new FlxTimer().start(3, function(t:FlxTimer) {
-			FlxTween.tween(text, {alpha: 0.000001}, 0.5, {
-				onComplete: function(tw:FlxTween) {
-					//lastText = text;
-					text.destroy();
-				}
+			//_numLogs++;
+			var color:FlxColor;
+			var text = new FlxText(5, 0, FlxG.width, log, 22);
+			switch (type)
+			{
+				case NORMAL:
+					color = FlxColor.WHITE;
+				case ERROR:
+					color = FlxColor.RED;
+				case NOTICE:
+					color = FlxColor.GREEN;
+			}
+			//text.ID = _numLogs;
+			text.setFormat(Paths.font('vcr.tff'), 22, color, FlxTextAlign.LEFT,  FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+			text.y = (lastText != null ? lastText.height + 5 : 10);
+			_traceGroup.add(text);
+	
+			new FlxTimer().start(3, function(t:FlxTimer) {
+				FlxTween.tween(text, {alpha: 0.000001}, 0.5, {
+					onComplete: function(tw:FlxTween) {
+						//lastText = text;
+						text.destroy();
+					}
+				});
 			});
-		});
+		}
 	}
 
 	override function destroy():Void
