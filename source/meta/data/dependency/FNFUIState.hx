@@ -37,7 +37,7 @@ class FNFUIState extends FlxUIState
 		super.create();
 	}
 
-	var lastText:FlxText = null;
+	static var lastText:FlxText = null;
 	public static function logTrace(log:String, type:TextType):Void
 	{
 		_trackedLogs.push(log);
