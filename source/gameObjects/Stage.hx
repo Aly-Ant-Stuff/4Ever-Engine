@@ -765,8 +765,8 @@ class Stage extends FlxTypedGroup<FlxBasic>
 		_image:String,
 		_x:Float,
 		_y:Float,
-		_scale:Array<Float>;
-		_scroll_factor:Array<Float>;
+		_scale:Array<Float>,
+		_scroll_factor:Array<Float>,
 		_animated:Bool,
 		_animations:Array<AnimationStruct>,
 		_atlas:String,
