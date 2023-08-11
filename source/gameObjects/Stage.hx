@@ -578,7 +578,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 	{
 		// REPOSITIONING
 			if (boyfriend != null)	boyfriend.setPosition(file.bf_position[0], file.bf_position[1]);
-			if (gf != null) gf.setPosition(file.gf_position[0], file.bf_position[1]);
+			if (gf != null) gf.setPosition(file.gf_position[0], file.gf_position[1]);
 			if (dad != null) dad.setPosition(file.dad_position[0], file.dad_position[1]);
 		/*
 		PlayState.defaultCamZoom = file.camera_zoom;
