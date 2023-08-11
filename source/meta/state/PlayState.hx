@@ -251,8 +251,9 @@ class PlayState extends MusicBeatState
 		add(stageBuild.gfForeground);
 
 		// add limo cus dumb layering
-		if (curStage == 'highway')
-			add(stageBuild.limo);
+		// bruh -aly
+		//if (curStage == 'highway')
+			//add(stageBuild.limo);
 
 		add(dadOpponent);
 		add(boyfriend);
