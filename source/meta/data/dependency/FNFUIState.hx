@@ -13,11 +13,11 @@ import flixel.util.FlxTimer;
 class FNFUIState extends FlxUIState
 {
 	//frontend
-	private var _traceCam:FlxCamera;
-	private var _traceGroup:FlxTypedGroup<FlxText>;
+	private static var _traceCam:FlxCamera;
+	private static var _traceGroup:FlxTypedGroup<FlxText>;
 	//backend
-	private var _numLogs:Int = 1; //for when increase will update the last text position
-	private var _trackedLogs:Array<String> = [];
+	private static var _numLogs:Int = 1; //for when increase will update the last text position
+	private static var _trackedLogs:Array<String> = [];
 
 	override function create()
 	{
@@ -27,7 +27,7 @@ class FNFUIState extends FlxUIState
 		FlxG.cameras.add(_traceCam);
 
 		_traceGroup = new FlxTypedGroup<FlxText>();
-		_traceGroup.cameras = [traceCam];
+		_traceGroup.cameras = [_traceCam];
 		add(_traceGroup);
 
 		// state stuffs
@@ -38,7 +38,7 @@ class FNFUIState extends FlxUIState
 	}
 
 	var lastText:FlxText = null;
-	public function logTrace(log:String, type:TextType):Void
+	public static function logTrace(log:String, type:TextType):Void
 	{
 		_trackedLogs.push(log);
 		//_numLogs++;
