@@ -20,6 +20,7 @@ import flixel.tweens.FlxTween;
 import gameObjects.background.*;
 import meta.state.PlayState;
 import meta.data.dependency.FNFSprite;
+import meta.data.dependency.FNFUIState;
 import meta.data.Conductor;
 import meta.CoolUtil;
 
@@ -177,7 +178,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 		this.curStage = curStage;
 
 		//i got so fucking hard coded -AlyAnt0
-		var __base:String = 'assets/images/backgrounds/${curStage}/';
+		var __base:String = SUtil.getStorageDirectory() + 'assets/images/backgrounds/${curStage}/';
 		var __fileToLoad:String = '';
 		var __path:String = '';
 		var alternativeFiles:Array<String> = ['data', curStage, 'stage'];
@@ -190,7 +191,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 			__path = SUtil.getStorageDirectory() + __base + __fileToLoad + '.json';
 			if (FileSystem.exists(__path))
 			{
-				curFile = Json.parse(File.getContent(path));
+				curFile = Json.parse(File.getContent(_path));
 				logTrace('it exists!!', NOTICE);
 			} else {
 				curFile = Json.parse(stageTemplate);
@@ -775,16 +776,15 @@ class Stage extends FlxTypedGroup<FlxBasic>
 		_add_object:Bool
 	) {
 		var obj:FNFSprite = new FNFSprite(_x, _y);
-		stageObjects.set(obj, _nameTag);
 
 		var imagePath = 'backgrounds/' + curStage + _image;
 		if (!_animated) {
 			obj.loadGraphic(Paths.image(imagePath));
 		} else {
 			obj.frames = switch (atlas) {
-				case 'sparrow':
+				case "sparrow":
 					Paths.getSparrowAtlas(imagePath);
-				case 'packer':
+				case "packer":
 					Paths.getPackerAtlas(imagePath);
 			}
 			for (anim in _animations) 
@@ -809,18 +809,21 @@ class Stage extends FlxTypedGroup<FlxBasic>
 		obj.scale.set(_scale[0], _scale[1]);
 		obj.updateHitbox();
 		if (_antialiasing != null) obj.antialiasing = _antialiasing;
+		stageObjects.set(_nameTag, obj);
 		if (_object_front_of != null)
 		{
 			switch(_object_front_of)
 			{
-				case 'bf' | '0' | 'boyfriend':
+				case "bf" | "0" | "boyfriend":
 					//TODO: for front of the bf
-				case 'gf' | '1' | 'girlfriend':
+				case "gf" | "1" | "girlfriend":
 					gfForeground.add(obj);
-				case 'dad' | '2' | 'opponent':
+				case "dad" | "2" | "opponent":
 					//TODO: same thing for the bf
-				case 'all_chars':
+				case "all_chars":
 					foreground.add(obj);
+				case "back" | "":
+					add(obj);
 			}
 		} else {
 			add(obj);
@@ -850,12 +853,13 @@ class Stage extends FlxTypedGroup<FlxBasic>
 	) {
 		var animObject = stageObjects.get(_tag);
 		if (indices != null) {
-			if (_atlas != 'packer')
+			if (_atlas != "packer")
 				animObject.animation.addByPrefix(_name, _prefix, _framerate, _loop);
 		} else {
-			if (_atlas != 'packer')
+			if (_atlas != "packer")
 				animObject.animation.addByIndices(_name, _prefix, _indices, "", _framerate, _loop);
 		}
+		// TODO: do for the packer atlas
 		animObject.addOffset(_name, _offsets[0], _offsets[1]);
 		if (_autoplay)
 			animObject.playAnim(_name);
