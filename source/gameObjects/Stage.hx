@@ -170,7 +170,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 	}';
 	var daPixelZoom = PlayState.daPixelZoom;
 
-	private var curFile:StageFile = null; //initially its null for no error stuff
+	public var curFile:StageFile = null; //initially its null for no error stuff
 
 	public function new(curStage)
 	{
@@ -191,11 +191,11 @@ class Stage extends FlxTypedGroup<FlxBasic>
 			__path = SUtil.getStorageDirectory() + __base + __fileToLoad + '.json';
 			if (FileSystem.exists(__path))
 			{
-				curFile = Json.parse(File.getContent(_path));
-				logTrace('it exists!!', NOTICE);
+				curFile = Json.parse(File.getContent(__path));
+				FNFUIState.logTrace('it exists!!', NOTICE);
 			} else {
 				curFile = Json.parse(stageTemplate);
-				logTrace('it doesent exists you DUMBASS!!!!!!', ERROR);
+				FNFUIState.logTrace('it doesent exists you DUMBASS!!!!!!', ERROR);
 			}
 		}
 
@@ -781,7 +781,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 		if (!_animated) {
 			obj.loadGraphic(Paths.image(imagePath));
 		} else {
-			obj.frames = switch (atlas) {
+			obj.frames = switch (_atlas) {
 				case "sparrow":
 					Paths.getSparrowAtlas(imagePath);
 				case "packer":
@@ -852,7 +852,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 		_atlas:String
 	) {
 		var animObject = stageObjects.get(_tag);
-		if (indices != null) {
+		if (_indices != null) {
 			if (_atlas != "packer")
 				animObject.animation.addByPrefix(_name, _prefix, _framerate, _loop);
 		} else {
