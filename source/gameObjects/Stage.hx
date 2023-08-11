@@ -568,7 +568,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 				objData.animations,
 				objData.atlas,
 				objData.object_front_of,
-				objData.antialiasing
+				objData.antialiasing,
 				objData.add_object
 			);
 			// TODO: MAKE THAT IT ADDS GROUPS AND SOUNDS FROM THE .JSON
@@ -577,23 +577,9 @@ class Stage extends FlxTypedGroup<FlxBasic>
 	public function positionCharacters(boyfriend:Character, dad:Character, gf:Character, file:StageFile):Void
 	{
 		// REPOSITIONING
-		for (char in [boyfriend, dad, gf])
-		{
-			if (char != null)
-			{
-				boyfriend.setPosition(
-					file.bf_position[0],
-					file.bf_position[1],
-				);
-				gf.setPosition(
-					file.gf_position[0],
-					file.bf_position[1],
-				);
-				dad.setPosition(
-					file.dad_position[0],
-					file.dad_position[1],
-				);
-			}
+			if (boyfriend != null)	boyfriend.setPosition(file.bf_position[0], file.bf_position[1]);
+			if (gf != null) gf.setPosition(file.gf_position[0], file.bf_position[1]);
+			if (dad != null) dad.setPosition(file.dad_position[0], file.dad_position[1] );
 		}
 		/*
 		PlayState.defaultCamZoom = file.camera_zoom;
