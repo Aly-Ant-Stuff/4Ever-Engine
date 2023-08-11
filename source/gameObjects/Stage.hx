@@ -777,22 +777,22 @@ class Stage extends FlxTypedGroup<FlxBasic>
 	) {
 		var obj:FNFSprite = new FNFSprite(_x, _y);
 
-		var imagePath = 'backgrounds/' + curStage + _image;
+		var _imagePath = 'backgrounds/' + curStage + _image;
 		if (!_animated) {
-			obj.loadGraphic(Paths.image(imagePath));
+			obj.loadGraphic(Paths.image(_imagePath));
 		} else {
-			obj.frames = switch (_atlas) {
+			switch (_atlas) {
 				case "sparrow":
-					Paths.getSparrowAtlas(imagePath);
+					obj.frames = Paths.getSparrowAtlas(_imagePath);
 				case "packer":
-					Paths.getPackerAtlas(imagePath);
-			}
+					obj.frames = Paths.getPackerAtlas(_imagePath);
+			};
 			for (anim in _animations) 
 			{
 				if (anim != null) 
 				{
 					createObjectAnimation(
-						_nameTag,
+						obj,
 						anim.name,
 						anim.prefix,
 						anim.framerate,
@@ -809,7 +809,6 @@ class Stage extends FlxTypedGroup<FlxBasic>
 		obj.scale.set(_scale[0], _scale[1]);
 		obj.updateHitbox();
 		if (_antialiasing != null) obj.antialiasing = _antialiasing;
-		stageObjects.set(_nameTag, obj);
 		if (_object_front_of != null)
 		{
 			switch(_object_front_of)
@@ -828,6 +827,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 		} else {
 			add(obj);
 		}
+		stageObjects.set(_nameTag, obj);
 		//logTrace('Object from the added: ')
 	}
 
@@ -841,7 +841,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 	var auto_play:Bool;
 	*/
 	public function createObjectAnimation(
-		_tag:String,
+		_obj:FNFSprite,
 		_name:String,
 		_prefix:String,
 		_framerate:Int,
@@ -851,7 +851,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 		_autoplay:Bool,
 		_atlas:String
 	) {
-		var animObject = stageObjects.get(_tag);
+		var animObject = _obj;
 		if (_indices != null) {
 			if (_atlas != "packer")
 				animObject.animation.addByPrefix(_name, _prefix, _framerate, _loop);
