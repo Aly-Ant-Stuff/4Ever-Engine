@@ -237,8 +237,7 @@ class PlayState extends MusicBeatState
 
 		var camPos:FlxPoint = new FlxPoint(gf.getMidpoint().x - 100, boyfriend.getMidpoint().y - 100);
 
-		stageBuild.repositionPlayers(curStage, boyfriend, dadOpponent, gf);
-		stageBuild.dadPosition(curStage, boyfriend, dadOpponent, gf, camPos);
+		stageBuild.generateStage(boyfriend, dadOpponent, gf, stageBuild.curFile);
 
 		if (SONG.assetModifier != null && SONG.assetModifier.length > 1)
 			assetModifier = SONG.assetModifier;
@@ -249,6 +248,7 @@ class PlayState extends MusicBeatState
 
 		// add characters
 		add(gf);
+		add(stageBuild.gfForeground);
 
 		// add limo cus dumb layering
 		if (curStage == 'highway')
