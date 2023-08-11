@@ -93,7 +93,7 @@ class ClassHUD extends FlxTypedGroup<FlxBasic>
 		cornerMark = new FlxText(0, 0, 0, engineDisplay);
 		cornerMark.setFormat(Paths.font('vcr.ttf'), 18, FlxColor.WHITE);
 		cornerMark.setBorderStyle(OUTLINE, FlxColor.BLACK, 2);
-		add(cornerMark);
+		//add(cornerMark);
 		cornerMark.setPosition(FlxG.width - (cornerMark.width + 5), 5);
 		cornerMark.antialiasing = true;
 
