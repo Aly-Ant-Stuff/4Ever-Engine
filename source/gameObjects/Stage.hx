@@ -31,20 +31,14 @@ import sys.io.File;
 using StringTools;
 
 typedef StageFile = {
-	var objects:Array<ObjectStruct>;
-	@:optional var groups:Array<GroupStruct>;
-	@:optional var sounds:Array<SoundStruct>;
+	var objects:Null<Array<ObjectStruct>>;
+	@:optional var groups:Null<Array<GroupStruct>>;
+	@:optional var sounds:Null<Array<SoundStruct>>;
 	var bf_position:Array<Float>;
 	var gf_position:Array<Float>;
 	var dad_position:Array<Float>;
 	var camera_zoom:Float;
 	var curStage:String;
-}
-
-typedef SoundStruct = {
-	var name_tag:String;
-	var path:String;
-	var auto_play:Bool;
 }
 
 typedef ObjectStruct = {
@@ -55,23 +49,26 @@ typedef ObjectStruct = {
 	var scale:Array<Float>;
 	var scroll_factor:Array<Float>;
 	var animated:Bool;
-	@:optional var animations:Array<AnimationStruct>;
+	@:optional var animations:Null<Array<AnimationStruct>>;
 	@:optional var atlas:String;
-	var antialiasing:Bool;
+	@:optional var object_front_of:Null<String>;
+	@:optional var antialiasing:Null<Bool>;
 	var add_object:Bool;
 }
 
 typedef GroupStruct = {
 	var name_tag:String;
 	var image:String;
-	var init_x:Float;
-	var init_y:Float;
+	var repeat_same_thing:Bool;
+	var x:Float;
+	var y:Float;
 	var copy_x:Float;
 	var copy_y:Float;
 	var copy_times:Int;
 	var animated:Bool;
 	@:optional var animations:Array<AnimationStruct>;
-	@:optional var atlas:String;
+	@:optional var atlas:Null<String>;
+	@:optional var object_front_of:Null<String>;
 	var antialiasing:Bool;
 	var add_group:Bool;
 }
@@ -85,6 +82,13 @@ typedef AnimationStruct = {
 	var loop:Bool;
 	var auto_play:Bool;
 }
+
+typedef SoundStruct = {
+	var name_tag:String;
+	var path:String;
+	var auto_play:Bool;
+}
+
 
 /**
 	This is the stage class. It sets up everything you need for stages in a more organised and clean manner than the
@@ -110,9 +114,11 @@ class Stage extends FlxTypedGroup<FlxBasic>
 	var santa:FNFSprite;
 
 	var bgGirls:BackgroundGirls;
+	public var gfForeground:FlxTypedGroup<FlxBasic>;
 	public var foreground:FlxTypedGroup<FlxBasic>;
 	public var curStage:String;
 	public var stageObjects:Map<String, FNFSprite> = new Map<String, FNFSprite>();
+	public var stageGroups:Map<String, FlxTypedGroup<FNFSprite>> = new Map<String, FlxTypedGroup<FNFSprite>>();
 	public var stageSounds:Map<String, FlxSound> = new Map<String, FlxSound>();
 
 	//i had to make this manually so respect me -AlyAnt0
@@ -173,15 +179,15 @@ class Stage extends FlxTypedGroup<FlxBasic>
 		//i got so fucking hard coded -AlyAnt0
 		var __base:String = 'assets/images/backgrounds/${curStage}/';
 		var __fileToLoad:String = '';
-		var alternativeFiles:Array<String> = ['data', curStage, 'stage'];
 		var __path:String = '';
+		var alternativeFiles:Array<String> = ['data', curStage, 'stage'];
 		for (file in alternativeFiles)
 		{
 			var _targetFile:String = file;
-			if (FileSystem.exists(__path + _targetFile))
+			if (FileSystem.exists(__base + _targetFile + '.json'))
 				__fileToLoad = _targetFile;
 
-			__path = SUtil.getStorageDirectory() + base + __fileToLoad;
+			__path = SUtil.getStorageDirectory() + __base + __fileToLoad + '.json';
 			if (FileSystem.exists(__path))
 			{
 				curFile = Json.parse(File.getContent(path));
@@ -220,10 +226,12 @@ class Stage extends FlxTypedGroup<FlxBasic>
 			PlayState.curStage = curStage;
 		}
 
+		// to apply what objects will be front of the gf
+		gfForeground = new FlxTypedGroup<FlxBasic>();
 		// to apply to foreground use foreground.add(); instead of add();
 		foreground = new FlxTypedGroup<FlxBasic>();
 
-		//
+		/*
 		switch (curStage)
 		{
 			case 'spooky':
@@ -472,36 +480,10 @@ class Stage extends FlxTypedGroup<FlxBasic>
 				add(bg);
 
 			default:
-				PlayState.defaultCamZoom = 0.9;
-				curStage = 'stage';
-				var bg:FNFSprite = new FNFSprite(-600, -200).loadGraphic(Paths.image('backgrounds/' + curStage + '/stageback'));
-				bg.antialiasing = true;
-				bg.scrollFactor.set(0.9, 0.9);
-				bg.active = false;
-
-				// add to the final array
-				add(bg);
-
-				var stageFront:FNFSprite = new FNFSprite(-650, 600).loadGraphic(Paths.image('backgrounds/' + curStage + '/stagefront'));
-				stageFront.setGraphicSize(Std.int(stageFront.width * 1.1));
-				stageFront.updateHitbox();
-				stageFront.antialiasing = true;
-				stageFront.scrollFactor.set(0.9, 0.9);
-				stageFront.active = false;
-
-				// add to the final array
-				add(stageFront);
-
-				var stageCurtains:FNFSprite = new FNFSprite(-500, -300).loadGraphic(Paths.image('backgrounds/' + curStage + '/stagecurtains'));
-				stageCurtains.setGraphicSize(Std.int(stageCurtains.width * 0.9));
-				stageCurtains.updateHitbox();
-				stageCurtains.antialiasing = true;
-				stageCurtains.scrollFactor.set(1.3, 1.3);
-				stageCurtains.active = false;
-
-				// add to the final array
-				add(stageCurtains);
+				setStageJson(curFile);
 		}
+		*/
+
 	}
 
 	// return the girlfriend's type
@@ -551,9 +533,71 @@ class Stage extends FlxTypedGroup<FlxBasic>
 		}
 	}
 
-	public function repositionPlayers(curStage, boyfriend:Character, dad:Character, gf:Character):Void
+	//generate all the stage
+	public function generateStage(boyfriend:Character, dad:Character, gf:Character, file:StageFile):Void
 	{
-		// REPOSITIONING PER STAGE
+		PlayState.defaultCamZoom = file.camera_zoom;
+		positionCharacters(boyfriend, dad, gf, file);
+		this.curStage = file.curStage;
+
+		// will create all the objects
+		for (objData in file.objects)
+		{
+			/*
+				_nameTag:String,
+				_image:String,
+				_x:Float,
+				_y:Float,
+				_scale:Array<Float>;
+				_scroll_factor:Array<Float>;
+				_animated:Bool,
+				_animations:Array<AnimationStruct>,
+				_atlas:String,
+				_object_front_of:Null<String>,
+				_antialiasing:Null<Bool>,
+				_add_object:Bool
+			*/ 
+			createStageObject(
+				objData.name_tag,
+				objData.image,
+				objData.x,
+				objData.y,
+				objData.scale,
+				objData.scroll_factor,
+				objData.animated,
+				objData.animations,
+				objData.atlas,
+				objData.object_front_of,
+				objData.antialiasing
+				objData.add_object
+			);
+			// TODO: MAKE THAT IT ADDS GROUPS AND SOUNDS FROM THE .JSON
+		}
+	}
+	public function positionCharacters(boyfriend:Character, dad:Character, gf:Character, file:StageFile):Void
+	{
+		// REPOSITIONING
+		for (char in [boyfriend, dad, gf])
+		{
+			if (char != null)
+			{
+				boyfriend.setPosition(
+					file.bf_position[0],
+					file.bf_position[1],
+				);
+				gf.setPosition(
+					file.gf_position[0],
+					file.bf_position[1],
+				);
+				dad.setPosition(
+					file.dad_position[0],
+					file.dad_position[1],
+				);
+			}
+		}
+		/*
+		PlayState.defaultCamZoom = file.camera_zoom;
+		this.curStage = file.curStage;
 		switch (curStage)
 		{
 			case 'highway':
@@ -582,6 +626,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 				gf.x += 180;
 				gf.y += 300;
 		}
+		*/
 	}
 
 	var curLight:Int = 0;
@@ -600,10 +645,12 @@ class Stage extends FlxTypedGroup<FlxBasic>
 		{
 			case 'highway':
 				// trace('highway update');
-				grpLimoDancers.forEach(function(dancer:BackgroundDancer)
-				{
-					dancer.dance();
-				});
+				if (grpLimoDancers != null) {
+					grpLimoDancers.forEach(function(dancer:BackgroundDancer)
+					{
+						dancer.dance();
+					});
+				}
 			case 'mall':
 				upperBoppers.animation.play('bop', true);
 				bottomBoppers.animation.play('bop', true);
@@ -713,6 +760,120 @@ class Stage extends FlxTypedGroup<FlxBasic>
 		trainCars = 8;
 		trainFinishing = false;
 		startedMoving = false;
+	}
+/*
+	var name_tag:String; //util for a event or something
+	var image:String;
+	var x:Float;
+	var y:Float;
+	var scale:Array<Float>;
+	var scroll_factor:Array<Float>;
+	var animated:Bool;
+	@:optional var animations:Array<AnimationStruct>;
+	@:optional var atlas:String;
+	@:optional var object_front_of:Null<String>;
+	@:optional var antialiasing:Null<Bool>;
+	var add_object:Bool;
+*/
+	function createStageObject(
+		_nameTag:String,
+		_image:String,
+		_x:Float,
+		_y:Float,
+		_scale:Array<Float>;
+		_scroll_factor:Array<Float>;
+		_animated:Bool,
+		_animations:Array<AnimationStruct>,
+		_atlas:String,
+		_object_front_of:Null<String>,
+		_antialiasing:Null<Bool>,
+		_add_object:Bool
+	) {
+		var obj:FNFSprite = new FNFSprite(_x, _y);
+		stageObjects.set(obj, _nameTag);
+
+		var imagePath = 'backgrounds/' + curStage + _image;
+		if (!_animated) {
+			obj.loadGraphic(Paths.image(imagePath));
+		} else {
+			obj.frames = switch (atlas) {
+				case 'sparrow':
+					Paths.getSparrowAtlas(imagePath);
+				case 'packer':
+					Paths.getPackerAtlas(imagePath);
+			}
+			for (anim in _animations) 
+			{
+				if (anim != null) 
+				{
+					createObjectAnimation(
+						_nameTag,
+						anim.name,
+						anim.prefix,
+						anim.framerate,
+						anim.offsets,
+						anim.indices,
+						anim.loop,
+						anim.auto_play,
+						_atlas
+					);
+				}
+			}
+		}
+		obj.scrollFactor.set(_scale[0], _scale[1]);
+		obj.scale.set(_scale[0], _scale[1]);
+		obj.updateHitbox();
+		if (_antialiasing != null) obj.antialiasing = _antialiasing;
+		if (_object_front_of != null)
+		{
+			switch(_object_front_of)
+			{
+				case 'bf' | '0' | 'boyfriend':
+					//TODO: for front of the bf
+				case 'gf' | '1' | 'girlfriend':
+					gfForeground.add(obj);
+				case 'dad' | '2' | 'opponent':
+					//TODO: same thing for the bf
+				case 'all_chars':
+					foreground.add(obj);
+			}
+		} else {
+			add(obj);
+		}
+		//logTrace('Object from the added: ')
+	}
+
+	/*
+	var name:String;
+	var prefix:String;
+	var framerate:Int;
+	var offsets:Array<Float>;
+	var indices:Array<Int>;
+	var loop:Bool;
+	var auto_play:Bool;
+	*/
+	public function createObjectAnimation(
+		_tag:String,
+		_name:String,
+		_prefix:String,
+		_framerate:Int,
+		_offsets:Array<Float>,
+		_indices:Null<Array<Int>>,
+		_loop:Bool,
+		_autoplay:Bool,
+		_atlas:String
+	) {
+		var animObject = stageObjects.get(_tag);
+		if (indices != null) {
+			if (_atlas != 'packer')
+				animObject.animation.addByPrefix(_name, _prefix, _framerate, _loop);
+		} else {
+			if (_atlas != 'packer')
+				animObject.animation.addByIndices(_name, _prefix, _indices, "", _framerate, _loop);
+		}
+		animObject.addOffset(_name, _offsets[0], _offsets[1]);
+		if (_autoplay)
+			animObject.playAnim(_name);
 	}
 
 	override function add(Object:FlxBasic):FlxBasic
