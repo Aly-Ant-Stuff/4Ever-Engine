@@ -11,6 +11,7 @@ import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
+import flixel.math.FlxMath;
 import meta.MusicBeat.MusicBeatState;
 import meta.data.dependency.Discord;
 
@@ -155,10 +156,10 @@ class MainMenuState extends MusicBeatState
 		// colorTest += 0.125;
 		// bg.color = FlxColor.fromHSB(colorTest, 100, 100, 0.5);
 
-		var up = #if !MOBILE_CONTROLS controls.UI_UP #else virtualPad.buttonUp.justPressed #end;
-		var down = #if !MOBILE_CONTROLS controls.UI_DOWN #else virtualPad.buttonDown.justPressed #end;
-		var up_p = #if !MOBILE_CONTROLS controls.UI_UP_P #else virtualPad.buttonUp.justPressed #end;
-		var down_p = #if !MOBILE_CONTROLS controls.UI_DOWN_P #else virtualPad.buttonUp.justPressed #end;
+		var up = controls.UI_UP;
+		var down = controls.UI_DOWN;
+		var up_p = controls.UI_UP_P;
+		var down_p = controls.UI_DOWN_P;
 		var controlArray:Array<Bool> = [up, down, up_p, down_p];
 
 		if ((controlArray.contains(true)) && (!selectedSomethin))
@@ -200,11 +201,7 @@ class MainMenuState extends MusicBeatState
 									FlxG.sound.play(Paths.sound('scrollMenu'));
 							}
 					}*/
-
-					if (curSelected < 0)
-						curSelected = optionShit.length - 1;
-					else if (curSelected >= optionShit.length)
-						curSelected = 0;
+					curSelected = Math.floor(FlxMath.wrap(curSelected, 0, optionShit.length));
 				}
 				//
 			}
@@ -215,7 +212,7 @@ class MainMenuState extends MusicBeatState
 			counterControl = 0;
 		}
 
-		if ((#if !MOBILE_CONTROLS controls.ACCEPT #else virtualPad.buttonA.justPressed #end) && (!selectedSomethin))
+		if ((controls.ACCEPT) && (!selectedSomethin))
 		{
 			//
 			selectedSomethin = true;
