@@ -205,6 +205,7 @@ class MainMenuState extends MusicBeatState
 							}
 					}*/
 					curSelected = FlxMath.wrap(Math.floor(curSelected), 0, optionShit.length);
+				}
 			}
 		}
 		else
