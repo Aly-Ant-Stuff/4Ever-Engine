@@ -177,7 +177,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 		this.curStage = curStage;
 
 		//i got so fucking hard coded -AlyAnt0
-		var __base:String = SUtil.getStorageDirectory() + 'assets/images/backgrounds/${curStage}/';
+		var __base:String = #if MOBILE_CONTROLS SUtil.getStorageDirectory() + #end 'assets/images/backgrounds/${curStage}/';
 		var __fileToLoad:String = '';
 		var __path:String = '';
 		var alternativeFiles:Array<String> = ['data', curStage, 'stage'];
