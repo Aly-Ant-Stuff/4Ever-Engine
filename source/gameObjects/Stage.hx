@@ -20,7 +20,6 @@ import flixel.tweens.FlxTween;
 import gameObjects.background.*;
 import meta.state.PlayState;
 import meta.data.dependency.FNFSprite;
-import meta.data.dependency.FNFUIState;
 import meta.data.Conductor;
 import meta.CoolUtil;
 
@@ -192,10 +191,10 @@ class Stage extends FlxTypedGroup<FlxBasic>
 			if (FileSystem.exists(__path))
 			{
 				curFile = Json.parse(File.getContent(__path));
-				FNFUIState.logTrace('it exists!!', NOTICE);
+				FlxG.log.add('it exists!!');
 			} else {
 				curFile = Json.parse(stageTemplate);
-				FNFUIState.logTrace('it doesent exists you DUMBASS!!!!!!', ERROR);
+				FlxG.log.error('it doesent exists you DUMBASS!!!!!!');
 			}
 		}
 
