@@ -12,16 +12,18 @@ import flixel.addons.ui.FlxUIState;
 
 class FNFUIState extends FlxUIState
 {
+	/*
 	//frontend
 	private static var _traceCam:FlxCamera;
 	private static var _traceGroup:FlxTypedGroup<FlxText>;
 	//backend
 	private static var _numLogs:Int = 1; //for when increase will update the last text position
 	private static var _trackedLogs:Array<String> = [];
-
+	*/
 	override function create()
 	{
 		// for trace stuff
+		/*
 		_traceCam = new FlxCamera();
 		_traceCam.bgColor.alpha = 0;
 		FlxG.cameras.add(_traceCam);
@@ -29,6 +31,7 @@ class FNFUIState extends FlxUIState
 		_traceGroup = new FlxTypedGroup<FlxText>();
 		_traceGroup.cameras = [_traceCam];
 		add(_traceGroup);
+		*/
 
 		// state stuffs
 		if (!FlxTransitionableState.skipNextTransOut)
@@ -37,6 +40,7 @@ class FNFUIState extends FlxUIState
 		super.create();
 	}
 
+/*
 	static var lastText:FlxText = null;
 	public static function logTrace(log:String, type:TextType):Void
 	{
@@ -80,11 +84,14 @@ class FNFUIState extends FlxUIState
 		}
 		super.destroy();
 	}
+*/
 }
 
+/*
 enum TextType
 {
 	NORMAL;
 	ERROR;
 	NOTICE;
 }
+*/
