@@ -192,10 +192,10 @@ class Stage extends FlxTypedGroup<FlxBasic>
 			if (FileSystem.exists(__path))
 			{
 				curFile = Json.parse(File.getContent(__path));
-				FNFUIState.logTrace('it exists!!', NOTICE);
+				PlayState.logTrace('it exists!!', NOTICE);
 			} else {
 				curFile = Json.parse(stageTemplate);
-				FNFUIState.logTrace('it doesent exists you DUMBASS!!!!!!', ERROR);
+				PlayState.logTrace('it doesent exists you DUMBASS!!!!!!', ERROR);
 			}
 		}
 
