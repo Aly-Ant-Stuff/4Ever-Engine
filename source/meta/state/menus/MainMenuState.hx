@@ -28,7 +28,7 @@ class MainMenuState extends MusicBeatState
 
 	var bg:FlxSprite; // the background has been separated for more control
 	var magenta:FlxSprite;
-	var camFollow:FlxObject;
+	var camFollow:FlxSprite;
 	var optionMap:Map<String, flixel.FlxState> = [
 		'story mode' => new StoryMenuState(),
 		'freeplay' => new FreeplayState(),
@@ -79,7 +79,10 @@ class MainMenuState extends MusicBeatState
 		add(magenta);
 
 		// add the camera
-		camFollow = new FlxObject(0, 0, 1, 1);
+		camFollow = new FlxSprite(0, 0);
+		camFollow.color.alpha = 0;
+		camFollow.width = 1;
+		camFollow.height = 1;
 		add(camFollow);
 
 		// add the menu items
@@ -132,6 +135,8 @@ class MainMenuState extends MusicBeatState
 		FlxG.camera.follow(camFollow, null, camLerp);
 
 		updateSelection();
+		FlxG.camera.minScrollY = bg.y;
+		FlxG.camera.maxScrollY = bg.y + bg.height;
 
 		// from the base game lol
 
@@ -139,8 +144,6 @@ class MainMenuState extends MusicBeatState
 		versionShit.scrollFactor.set();
 		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		//add(versionShit);
-
-		//
 
 		#if MOBILE_CONTROLS
 		addVirtualPad(UP_DOWN, A);
@@ -273,6 +276,7 @@ class MainMenuState extends MusicBeatState
 		// set the sprites and all of the current selection
 		camFollow.setPosition(menuItems.members[Math.floor(curSelected)].getGraphicMidpoint().x,
 			menuItems.members[Math.floor(curSelected)].getGraphicMidpoint().y);
+		
 
 		if (menuItems.members[Math.floor(curSelected)].animation.curAnim.name == 'idle')
 			menuItems.members[Math.floor(curSelected)].animation.play('selected');
