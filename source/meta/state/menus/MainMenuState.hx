@@ -240,15 +240,12 @@ class MainMenuState extends MusicBeatState
 					FlxFlicker.flicker(spr, 1, 0.06, false, false, function(flick:FlxFlicker)
 					{
 						var daChoice:String = optionShit[Math.floor(curSelected)];
-						if ((optionMap[daChoice] is flixel.FlxState))
+						if (daChoice == 'options')
 						{
-							if (daChoice == 'options')
-							{
-								transIn = FlxTransitionableState.defaultTransIn;
-								transOut = FlxTransitionableState.defaultTransOut;
-							}
-							Main.switchState(this, optionMap[daChoice]);
+							transIn = FlxTransitionableState.defaultTransIn;
+							transOut = FlxTransitionableState.defaultTransOut;
 						}
+						Main.switchState(this, optionMap[daChoice]);
 					});
 				}
 			});
