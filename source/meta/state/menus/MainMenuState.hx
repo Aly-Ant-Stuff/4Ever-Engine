@@ -204,9 +204,7 @@ class MainMenuState extends MusicBeatState
 									FlxG.sound.play(Paths.sound('scrollMenu'));
 							}
 					}*/
-					curSelected = Math.floor(FlxMath.wrap(curSelected, 0, optionShit.length));
-				}
-				//
+					curSelected = FlxMath.wrap(Math.floor(curSelected), 0, optionShit.length);
 			}
 		}
 		else
