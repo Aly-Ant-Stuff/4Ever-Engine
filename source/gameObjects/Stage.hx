@@ -53,6 +53,7 @@ typedef ObjectStruct = {
 	@:optional var atlas:String;
 	@:optional var object_front_of:Null<String>;
 	@:optional var antialiasing:Null<Bool>;
+	var object_class:String;
 	var add_object:Bool;
 }
 
@@ -534,8 +535,9 @@ class Stage extends FlxTypedGroup<FlxBasic>
 	}
 
 	//generate all the stage
-	public function generateStage(boyfriend:Character, dad:Character, gf:Character, file:StageFile):Void
+	public function generateStage(boyfriend:Character, dad:Character, gf:Character, stage:Dynamic = null):Void
 	{
+		var file:StageFile = cast stage;
 		PlayState.defaultCamZoom = file.camera_zoom;
 		positionCharacters(boyfriend, dad, gf, file);
 		this.curStage = file.curStage;
@@ -577,7 +579,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 	public function positionCharacters(boyfriend:Character, dad:Character, gf:Character, file:StageFile):Void
 	{
 		// REPOSITIONING
-			if (boyfriend != null)	boyfriend.setPosition(file.bf_position[0], file.bf_position[1]);
+			if (boyfriend != null) boyfriend.setPosition(file.bf_position[0], file.bf_position[1]);
 			if (gf != null) gf.setPosition(file.gf_position[0], file.gf_position[1]);
 			if (dad != null) dad.setPosition(file.dad_position[0], file.dad_position[1]);
 		/*
@@ -772,11 +774,16 @@ class Stage extends FlxTypedGroup<FlxBasic>
 		_atlas:String,
 		_object_front_of:Null<String>,
 		_antialiasing:Null<Bool>,
+		_object_class:Null<String>,
 		_add_object:Bool
 	) {
-		var obj:FNFSprite = new FNFSprite(_x, _y);
+		switch (_object_class) {
+			case '' | 'normal' | null:
+				var obj:FNFSprite = new FNFSprite(_x, _y);
+			//its for like object that makes side dance (like the skid and pump and the background dancers in the week4)
+		}
 
-		var _imagePath = 'backgrounds/' + curStage + _image;
+		var _imagePath = 'backgrounds/' + curStage + '/' + _image;
 		if (!_animated) {
 			obj.loadGraphic(Paths.image(_imagePath));
 		} else {
