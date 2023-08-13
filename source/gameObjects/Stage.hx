@@ -571,6 +571,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 				objData.atlas,
 				objData.object_front_of,
 				objData.antialiasing,
+				objData.object_class,
 				objData.add_object
 			);
 			// TODO: MAKE THAT IT ADDS GROUPS AND SOUNDS FROM THE .JSON
