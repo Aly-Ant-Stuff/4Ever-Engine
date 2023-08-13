@@ -778,11 +778,19 @@ class Stage extends FlxTypedGroup<FlxBasic>
 		_object_class:Null<String>,
 		_add_object:Bool
 	) {
-		switch (_object_class) {
-			case '' | 'normal' | null:
-				var obj:FNFSprite = new FNFSprite(_x, _y);
-			//its for like object that makes side dance (like the skid and pump and the background dancers in the week4)
+		var obj:FNFSprite = new FNFSprite(_x, _y);
+
+		//classes lololololo
+		/*
+		if (_object_class != null)
+		{
+			switch (_object_class) { //for not being null
+				case '' | 'normal' | null:
+					obj = new FNFSprite(_x, _y);
+				//its for like object that makes side dance (like the skid and pump and the background dancers in the week4)
+			}
 		}
+		*/
 
 		var _imagePath = 'backgrounds/' + curStage + '/' + _image;
 		if (!_animated) {
