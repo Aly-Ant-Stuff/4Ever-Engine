@@ -782,6 +782,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 
 		//classes lololololo
 		//pra atualiza depois
+		/*
 		if (_object_class != null)
 		{
 			switch (_object_class) {
@@ -790,6 +791,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 				//e pros objetos tipo os capanga da mae da gf na week 4
 			}
 		}
+		*/
 
 		var _imagePath = 'backgrounds/' + curStage + '/' + _image;
 		if (!_animated) {
