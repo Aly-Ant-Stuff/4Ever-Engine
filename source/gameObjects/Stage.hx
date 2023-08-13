@@ -179,11 +179,8 @@ class Stage extends FlxTypedGroup<FlxBasic>
 
 		//i got so fucking hard coded -AlyAnt0
 		var __base:String = SUtil.getStorageDirectory() + 'assets/images/backgrounds/' + curStage + '/';
-		var __fileToLoad:String = '';
+		var __fileToLoad:String = 'stage';
 		var __path:String = '';
-		if (FileSystem.exists(__base + _targetFile + '.json'))
-			__fileToLoad = _targetFile;
-
 		__path = __base + __fileToLoad + '.json';
 		if (FileSystem.exists(__path))
 		{
