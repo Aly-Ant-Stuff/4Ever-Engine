@@ -127,7 +127,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 		"objects": [
 			{
 				"name_tag": "stageBackground",
-				"image": "stageback",
+				"image": "stage/stageback",
 				"x": -600, 
 				"y": -200,
 				"scale": [1, 1],
@@ -139,7 +139,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 			},
 			{
 				"name_tag": "stageFront",
-				"image": "stagefront",
+				"image": "stage/stagefront",
 				"x": -650,
 				"y": 600,
 				"scale": [0.9, 0.9],
@@ -151,7 +151,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 			},
 			{
 				"name_tag": "stageCurtains",
-				"image": "stagecurtains",
+				"image": "stage/stagecurtains",
 				"x": -500,
 				"y": -300,
 				"scale": [0.9, 0.9],
@@ -162,9 +162,9 @@ class Stage extends FlxTypedGroup<FlxBasic>
 				"add_object": true
 			}
 		],
-		"bf_position": [750, 850],
-		"gf_position": [300, 100],
-		"dad_position": [50, 850],
+		"bf_position": [770, 450],
+		"gf_position": [400, 130],
+		"dad_position": [100, 100],
 		"camera_zoom": 0.9,
 		"curStage": "stageTemplate"
 	}';
@@ -178,25 +178,20 @@ class Stage extends FlxTypedGroup<FlxBasic>
 		this.curStage = curStage;
 
 		//i got so fucking hard coded -AlyAnt0
-		var __base:String = #if MOBILE_CONTROLS SUtil.getStorageDirectory() + #end 'assets/images/backgrounds/${curStage}/';
+		var __base:String = SUtil.getStorageDirectory() + 'assets/images/backgrounds/' + curStage + '/';
 		var __fileToLoad:String = '';
 		var __path:String = '';
-		var alternativeFiles:Array<String> = ['data', curStage, 'stage'];
-		for (file in alternativeFiles)
-		{
-			var _targetFile:String = file;
-			if (FileSystem.exists(__base + _targetFile + '.json'))
-				__fileToLoad = _targetFile;
+		if (FileSystem.exists(__base + _targetFile + '.json'))
+			__fileToLoad = _targetFile;
 
-			__path = __base + __fileToLoad + '.json';
-			if (FileSystem.exists(__path))
-			{
+		__path = __base + __fileToLoad + '.json';
+		if (FileSystem.exists(__path))
+		{
 				curFile = Json.parse(File.getContent(__path));
 				FlxG.log.add('it exists!!');
-			} else {
+		} else {
 				curFile = Json.parse(stageTemplate);
 				FlxG.log.error('it doesent exists you DUMBASS!!!!!!');
-			}
 		}
 
 		/// get hardcoded stage type if chart is fnf style
@@ -543,7 +538,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 		this.curStage = file.curStage;
 
 		// will create all the objects
-		for (objData in file.objects)
+		for (i in 0...file.objects.length)
 		{
 			/*
 				_nameTag:String,
@@ -559,6 +554,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 				_antialiasing:Null<Bool>,
 				_add_object:Bool
 			*/ 
+			var objData = file.objects[i];
 			createStageObject(
 				objData.name_tag,
 				objData.image,
@@ -792,8 +788,9 @@ class Stage extends FlxTypedGroup<FlxBasic>
 			}
 		}
 		*/
+		//backgrounds/' + curStage + '/weebTrees
 
-		var _imagePath = 'backgrounds/' + curStage + '/' + _image;
+		var _imagePath = 'backgrounds/' + _image;
 		if (!_animated) {
 			obj.loadGraphic(Paths.image(_imagePath));
 		} else {
@@ -825,23 +822,25 @@ class Stage extends FlxTypedGroup<FlxBasic>
 		obj.scale.set(_scale[0], _scale[1]);
 		obj.updateHitbox();
 		if (_antialiasing != null) obj.antialiasing = _antialiasing;
-		if (_object_front_of != null)
-		{
-			switch(_object_front_of)
+		if (_add_object) {
+			if (_object_front_of != null)
 			{
-				case "bf" | "0" | "boyfriend":
-					//TODO: for front of the bf
-				case "gf" | "1" | "girlfriend":
-					gfForeground.add(obj);
-				case "dad" | "2" | "opponent":
-					//TODO: same thing for the bf
-				case "all_chars":
-					foreground.add(obj);
-				case "back" | "":
-					add(obj);
+				switch(_object_front_of)
+				{
+					case "bf" | "0" | "boyfriend":
+						//TODO: for front of the bf
+					case "gf" | "1" | "girlfriend":
+						gfForeground.add(obj);
+					case "dad" | "2" | "opponent":
+						//TODO: same thing for the bf
+					case "all_chars":
+						foreground.add(obj);
+					case "back" | "":
+						add(obj);
+				}
+			} else {
+				add(obj);
 			}
-		} else {
-			add(obj);
 		}
 		stageObjects.set(_nameTag, obj);
 		//logTrace('Object from the added: ')
