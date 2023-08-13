@@ -1,8 +1,8 @@
 {
 	"objects": [
-			{
+		{
 				"name_tag": "stageBackground",
-				"image": "stageback",
+				"image": "stage/stageback",
 				"x": -600, 
 				"y": -200,
 				"scale": [1, 1],
@@ -11,10 +11,10 @@
 				"animations": [],
 				"antialiasing": true,
 				"add_object": true
-			},
-			{
+		},
+		{
 				"name_tag": "stageFront",
-				"image": "stagefront",
+				"image": "stage/stagefront",
 				"x": -650,
 				"y": 600,
 				"scale": [0.9, 0.9],
@@ -23,10 +23,10 @@
 				"animations": [],
 				"antialiasing": true,
 				"add_object": true
-			},
-			{
+		},
+		{
 				"name_tag": "stageCurtains",
-				"image": "stagecurtains",
+				"image": "stage/stagecurtains",
 				"x": -500,
 				"y": -300,
 				"scale": [0.9, 0.9],
@@ -35,11 +35,11 @@
 				"animations": [],
 				"antialiasing": true,
 				"add_object": true
-			}
-		],
-	"bf_position": [750, 850],
-	"gf_position": [300, 100],
-	"dad_position": [50, 850],
+		}
+	],
+	"bf_position": [770, 450],
+	"gf_position": [400, 130],
+	"dad_position": [100, 100],
 	"camera_zoom": 0.9,
 	"curStage": "stage"
 }
