@@ -142,7 +142,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 				"image": "stage/stagefront",
 				"x": -650,
 				"y": 600,
-				"scale": [0.9, 0.9],
+				"scale": [1.1, 1.1],
 				"scroll_factor": [0.9, 0.9],
 				"animated": false,
 				"animations": [],
