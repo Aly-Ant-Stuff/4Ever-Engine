@@ -166,7 +166,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 		"gf_position": [400, 130],
 		"dad_position": [100, 100],
 		"camera_zoom": 0.9,
-		"curStage": "stageTemplate"
+		"curStage": "stage"
 	}';
 	var daPixelZoom = PlayState.daPixelZoom;
 
