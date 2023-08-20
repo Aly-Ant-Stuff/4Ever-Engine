@@ -1,4 +1,5 @@
 .vscode/
 .haxelib/
 export/
+assets/fonts/
 docs/legacy-docs/_build
